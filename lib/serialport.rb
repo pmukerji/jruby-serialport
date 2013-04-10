@@ -20,11 +20,7 @@ class SerialPort
     update_serial_port_params
 
     @in  = @port.input_stream
-    @in_io = @in.to_io
     @out = @port.output_stream
-    
-    # Clear anything on the port
-    @in_io.read(@in.available)
     
   end
 
@@ -34,15 +30,14 @@ class SerialPort
 
   def write data
     @out.write data.to_java_bytes
+    data.bytes.count
   end
 
-  def read num_bytes=nil
-    if num_bytes
-      wait_for_data num_bytes
-      @in_io.read(num_bytes) || ''
-    else
-      @in_io.read(@in.available) || ''
-    end
+  def read num_bytes
+    buffer = Java::byte[num_bytes].new
+    total = 0; read = 0
+    total += read while (total < num_bytes && (read = @in.read(buffer, total, num_bytes-total)) > 0)
+    String.from_java_bytes(buffer)
   end
   
   def data_bits= value
@@ -60,17 +55,16 @@ class SerialPort
     update_serial_port_params
   end
   
+  def read_timeout= value
+    @read_timeout = value
+    @port.enable_receive_timeout @read_timeout
+  end
+  
   protected
   
   def update_serial_port_params
     @port.set_serial_port_params @baud, @data_bits, @stop_bits, @parity
   end  
 
-  def wait_for_data num_bytes
-    timeout = Time.now + Float(@read_timeout)/1000.0
-    while Time.now < timeout || @in.available < num_bytes
-      sleep 0.1
-    end
-  end
-  
+
 end
