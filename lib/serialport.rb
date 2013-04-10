@@ -11,8 +11,8 @@ class SerialPort
   def initialize name, baud, data_bits=8, stop_bits=1, parity=GnuSerialPort::PARITY_NONE
     
     @baud = baud
-    @data_bits    = GnuSerialPort.const_get "DATABITS_#{data_bits}"
-    @stop_bits    = GnuSerialPort.const_get "STOPBITS_#{stop_bits}"
+    @data_bits = GnuSerialPort.const_get "DATABITS_#{data_bits}"
+    @stop_bits = GnuSerialPort.const_get "STOPBITS_#{stop_bits}"
     @parity = parity
     @port = CommPortIdentifier.get_port_identifier(name).open 'JRuby', 500
     
@@ -23,28 +23,24 @@ class SerialPort
     @in_io = @in.to_io
     @out = @port.output_stream
     
+    # Clear anything on the port
+    @in_io.read(@in.available)
+    
   end
 
   def close
     @port.close
   end
 
-  def write bytes
-    @out.write bytes.to_java_bytes
+  def write data
+    @out.write data.to_java_bytes
   end
 
   def read num_bytes=nil
     if num_bytes
-      if @read_timeout
-        deadline = Time.now + @read_timeout / 1000.0
-        sleep 0.01 until @in.available == num_bytes || Time.now > deadline
-      end
+      wait_for_data num_bytes
       @in_io.read(num_bytes) || ''
     else
-      if @read_timeout
-        deadline = Time.now + @read_timeout / 1000.0
-        sleep 0.01 until @in.available > 0 || Time.now > deadline
-      end
       @in_io.read(@in.available) || ''
     end
   end
@@ -70,5 +66,11 @@ class SerialPort
     @port.set_serial_port_params @baud, @data_bits, @stop_bits, @parity
   end  
 
-
+  def wait_for_data num_bytes
+    timeout = Time.now + Float(@read_timeout)/1000.0
+    while Time.now < timeout || @in.available < num_bytes
+      sleep 0.1
+    end
+  end
+  
 end
