@@ -1,12 +1,12 @@
 # JRuby Serial Port Gem
 
-JRuby wrapper for serial port communication mimicking the ruby-serialport gem
+JRuby wrapper for serial port communication mimicking the functionality of the ruby-serialport gem
 
 Based off of [pragpub](https://github.com/undees/pragpub) and [jr_serial_port](https://github.com/dcrosby42/jr_serial_port) projects.
 
 ## Requirements
 
-Must have the RXTXcomm.jar and librxtxSerial libraries in your /Library/Java/Extensions folder.
+Must have the RXTXcomm.jar and librxtxSerial libraries in your java paths.
 
 An example of the files can be found at the this [RXTX wiki](http://rxtx.qbang.org/wiki/index.php/Download)
 

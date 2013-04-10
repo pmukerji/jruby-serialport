@@ -16,7 +16,6 @@ class SerialPort
     @parity = parity
     @port = CommPortIdentifier.get_port_identifier(name).open 'JRuby', 500
     
-    # Sets the data_bits, stop_bits, parity
     update_serial_port_params
 
     @in  = @port.input_stream
@@ -65,6 +64,5 @@ class SerialPort
   def update_serial_port_params
     @port.set_serial_port_params @baud, @data_bits, @stop_bits, @parity
   end  
-
 
 end
