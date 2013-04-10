@@ -6,7 +6,7 @@ Based off of [pragpub](https://github.com/undees/pragpub) and [jr_serial_port](h
 
 ## Requirements
 
-Must have the RXTXcomm.jar and librxtxSerial libraries in your java paths.
+Must have the librxtxSerial libraries in your java paths.
 
 An example of the files can be found at the this [RXTX wiki](http://rxtx.qbang.org/wiki/index.php/Download)
 
