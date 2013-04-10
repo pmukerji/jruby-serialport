@@ -6,18 +6,18 @@ java_import('gnu.io.SerialPort') { 'GnuSerialPort' }
 
 class SerialPort
   
-  attr_accessor :read_timeout
+  attr_accessor :baud, :data_bits, :stop_bits, :parity, :read_timeout
 
-  NONE = GnuSerialPort::PARITY_NONE
-
-  def initialize name, baud, data=8, stop=1, parity=NONE
+  def initialize name, baud, data_bits=8, stop_bits=1, parity=GnuSerialPort::PARITY_NONE
     
-    port_id = CommPortIdentifier.get_port_identifier name
-    data    = GnuSerialPort.const_get "DATABITS_#{data}"
-    stop    = GnuSerialPort.const_get "STOPBITS_#{stop}"
-
-    @port = port_id.open 'JRuby', 500
-    @port.set_serial_port_params baud, data, stop, parity
+    @baud = baud
+    @data_bits    = GnuSerialPort.const_get "DATABITS_#{data_bits}"
+    @stop_bits    = GnuSerialPort.const_get "STOPBITS_#{stop_bits}"
+    @parity = parity
+    @port = CommPortIdentifier.get_port_identifier(name).open 'JRuby', 500
+    
+    # Sets the data_bits, stop_bits, parity
+    update_serial_port_params
 
     @in  = @port.input_stream
     @in_io = @in.to_io
@@ -34,21 +34,41 @@ class SerialPort
   end
 
   def read num_bytes=nil
-    
     if num_bytes
       if @read_timeout
         deadline = Time.now + @read_timeout / 1000.0
-        sleep 0.1 until @in.available == num_bytes || Time.now > deadline
+        sleep 0.01 until @in.available == num_bytes || Time.now > deadline
       end
       @in_io.read(num_bytes) || ''
     else
       if @read_timeout
         deadline = Time.now + @read_timeout / 1000.0
-        sleep 0.1 until @in.available > 0 || Time.now > deadline
+        sleep 0.01 until @in.available > 0 || Time.now > deadline
       end
       @in_io.read(@in.available) || ''
     end
-    
   end
+  
+  def data_bits= value
+    @data_bits = value
+    update_serial_port_params
+  end
+  
+  def stop_bits= value
+    @stop_bits = value
+    update_serial_port_params
+  end
+  
+  def parity= value
+    @parity = value
+    update_serial_port_params
+  end
+  
+  protected
+  
+  def update_serial_port_params
+    @port.set_serial_port_params @baud, @data_bits, @stop_bits, @parity
+  end  
+
 
 end
