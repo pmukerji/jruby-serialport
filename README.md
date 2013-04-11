@@ -14,6 +14,29 @@ If you're having trouble on OSX, check out this site: [jlog.org](http://jlog.org
 
 ## Usage
 
+Include jruby-serial port in your Gemfile:
+
+```ruby
+#gem is not published yet
+gem "jruby-serialport", :git => "git://github.com/pmukerji/ruby-serialport.git"
+```
+
+If you have an application you want to run with JRuby and Ruby then you can specify the platform. For example:
+
+```ruby
+
+platforms :jruby do
+  gem "jruby-serialport", :git => "git://github.com/pmukerji/jruby-serialport.git"
+end
+
+platforms :ruby do
+  gem "serialport", :git => "git://github.com/pmukerji/ruby-serialport.git"
+end
+
+```
+
+Use jruby-serialport in your application:
+
 ```ruby
 
 require "jruby-serialport"
