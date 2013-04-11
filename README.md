@@ -39,7 +39,7 @@ Use jruby-serialport in your application:
 
 ```ruby
 
-require "jruby-serialport"
+require "serialport"
 
 serial_port = SerialPort.new "/dev/ttyUSB0", 38400 # optional data_bits=8, stop_bits=1, parity=GnuSerialPort::PARITY_NONE
 
