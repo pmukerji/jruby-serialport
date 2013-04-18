@@ -2,15 +2,18 @@ Gem::Specification.new do |s|
   
   s.name = %q{jruby-serialport}
   s.version = "0.0.1"
-
-  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Pratik Mukerji"]
-  s.date = %q{2013-04-10}
+  s.email = ["pratik@electricfeel.com"]
+  s.homepage = "https://github.com/pmukerji/jruby-serialport"
   s.summary = "JRuby Serial Port wrapper"
-  s.email = %q{pratik@electricfeel.com}
+  s.description = <<-EOF
+    JRuby wrapper for serial port communication mimicking the ruby-serialport gem.
+  EOF
+  s.platform = Gem::Platform::JAVA
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.7}
-  s.description = %q{JRuby wrapper for serial port communication mimicking the ruby-serialport gem}
-  s.files = Dir["lib/**/*.rb"]
+  s.files = `git ls-files`.split("\n")
+  s.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
+  s.add_development_dependency 'rspec', '~> 2.5'
   
 end
