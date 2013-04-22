@@ -49,10 +49,10 @@ serial_port.write "output data" # returns length (in bytes) of the message writt
 
 num_bytes_to_read = 5
 
-serial_port.read num_bytes # returns message or whatever could be read before timeout was reached
+serial_port.read num_bytes_to_read # returns message or whatever could be read before timeout was reached
 
 ```
 
 ## Tests
 
-There are currently no tests written for this library. Please add some!
+There are currently only a few tests written for this library. Please add some!
