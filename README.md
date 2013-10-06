@@ -18,7 +18,7 @@ Include jruby-serial port in your Gemfile:
 
 ```ruby
 #gem is not published yet
-gem "jruby-serialport", :git => "git://github.com/pmukerji/ruby-serialport.git"
+gem "jruby-serialport", :git => "git://github.com/pmukerji/jruby-serialport.git"
 ```
 
 If you have an application you want to run with JRuby and Ruby then you can specify the platform. For example:
